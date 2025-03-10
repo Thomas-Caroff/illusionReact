@@ -56,8 +56,6 @@ function SkillsCard({ skillList, stats }) {
     setSnackbarOpen(false);
   };
 
-  console.log("GET", statForm);
-
   useEffect(() => {
     const updatedSkillList = skillList.map((skill) => ({
       ...skill,
@@ -86,7 +84,6 @@ function SkillsCard({ skillList, stats }) {
         skill_proficiency: skillProficiency,
         skill_expertise: skillExpertise,
       };
-      console.log("Before PUT", updatedStatForm);
 
       try {
         const response = await fetch(API_URL + "characterstats/" + stats.id, {
@@ -106,7 +103,6 @@ function SkillsCard({ skillList, stats }) {
           setSnackbarSeverity("error");
         }
       } catch (error) {
-        console.log("In ERROR", error);
         setSnackbarMessage("Erreur réseau : " + error.message);
         setSnackbarSeverity("error");
       }

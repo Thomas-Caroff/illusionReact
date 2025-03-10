@@ -39,10 +39,13 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
 import { useEffect, useState } from "react";
 import { API_URL } from "constants";
+import CharaHeaderCard from "examples/Cards/StatisticsCards/CharaHeaderCards";
 
 function Stats() {
+  let [character, setCharacter] = useState([]);
   let [caracterisctics, setCaracterisctics] = useState([]);
   let [skills, setSkills] = useState([]);
+  let [charaHeader, setCharaHeader] = useState([]);
   const { sales, tasks } = reportsLineChartData;
 
   const hardcoded_character = "tscxxg28";
@@ -91,6 +94,13 @@ function Stats() {
 
             setCaracterisctics(caracterisctics);
           });
+        fetch(API_URL + "characterhealth/" + json[0].character_health)
+          .then((response) => response.json())
+          .then((health) => {
+            let charaHealth = health[0];
+            setCharaHeader(charaHealth);
+          });
+        setCharacter(json[0]);
       });
     fetch(API_URL + "skillset/" + hardcoded_skillset)
       .then((response) => response.json())
@@ -119,7 +129,14 @@ function Stats() {
       <DashboardNavbar />
       <MDBox py={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={5}>
+          <Grid item sm={12} lg={8}>
+            <MDBox mb={1}>
+              <CharaHeaderCard health={charaHeader} character={character} />
+            </MDBox>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={12} md={6} lg={6}>
             <MDBox mb={1.5}>
               <StatisticsCard
                 color="dark"
@@ -129,23 +146,8 @@ function Stats() {
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={5}>
+          <Grid item xs={12} md={6} lg={6}>
             <SkillsCard skillList={skills} stats={caracterisctics} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
-            </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
